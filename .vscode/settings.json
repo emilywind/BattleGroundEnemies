@@ -1,0 +1,13 @@
+{
+  "Lua.diagnostics.globals": [
+    "Mixin",
+    "ShrinkUntilTruncateFontStringMixin",
+    "EditModeSystemSelectionMixin",
+    "NineSliceUtil",
+    "PlayerCastingBarFrame",
+    "CopyTable",
+    "EditModeUtil",
+    "UIParent",
+    "ObjectiveTrackerFrame"
+  ]
+}
