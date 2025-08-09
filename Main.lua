@@ -358,8 +358,12 @@ end
 function BattleGroundEnemies:UpdateDRsEditMode(playerButton)
 	local drCatSpells = GetAllDrCategorySpells()
 	for categoryName, spellIDs in pairs(drCatSpells) do
-		local resetTime = DRList:GetResetTime(categoryName)
-		local spellId = spellIDs[math_random(1, #spellIDs)]
+		local spellCount = #spellIDs
+		if spellCount < 1 then
+			return
+		end
+		local spellIndex = math.random(1, #spellIDs)
+		local spellId = spellIDs[spellIndex]
 		local random = math.random(1,3)
 		if random == 1 then
 			playerButton:AuraRemoved(spellId, GetSpellName(spellId))
@@ -1734,7 +1738,7 @@ function BattleGroundEnemies:SearchGUIDForPlayers(GUID)
 		classToken = englishClass,
 	}
 
-	--[[ 		
+	--[[
 	local scoreInfo = C_PvP.GetScoreInfoByPlayerGuid(GUID)
 	if scoreInfo and type(scoreInfo) =="table" then
 		if scoreInfo.faction ~= myBGFaction then
