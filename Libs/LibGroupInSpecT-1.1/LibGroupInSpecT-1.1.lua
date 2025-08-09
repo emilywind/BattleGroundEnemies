@@ -162,12 +162,13 @@ local CanInspect                      = _G.CanInspect
 local ClearInspectPlayer              = _G.ClearInspectPlayer
 local GetClassInfo                    = _G.GetClassInfo
 local GetNumSubgroupMembers           = _G.GetNumSubgroupMembers
-local GetNumSpecializationsForClassID = _G.GetNumSpecializationsForClassID
+local GetNumSpecializationsForClassID = _G.GetNumSpecializationsForClassID or C_SpecializationInfo.GetNumSpecializationsForClassID
 local GetPlayerInfoByGUID             = _G.GetPlayerInfoByGUID
+local GetActiveSpecGroup              = _G.GetActiveSpecGroup or C_SpecializationInfo.GetActiveSpecGroup
 local GetInspectSelectedPvpTalent     = _G.C_SpecializationInfo.GetInspectSelectedPvpTalent
 local GetInspectSpecialization        = _G.GetInspectSpecialization
-local GetSpecialization               = _G.GetSpecialization
-local GetSpecializationInfo           = _G.GetSpecializationInfo
+local GetSpecialization               = _G.GetSpecialization or C_SpecializationInfo.GetSpecialization
+local GetSpecializationInfo           = _G.GetSpecializationInfo or C_SpecializationInfo.GetSpecializationInfo
 local GetSpecializationInfoForClassID = _G.GetSpecializationInfoForClassID
 local GetSpecializationRoleByID       = _G.GetSpecializationRoleByID
 local GetPvpTalentInfoByID            = _G.GetPvpTalentInfoByID
@@ -575,8 +576,8 @@ function lib:BuildInfo (unit)
     info.spec_group = GetActiveSpecGroup (is_inspect)
 
     wipe (info.talents)
-    local config_id = is_inspect and -1 or C_ClassTalents.GetActiveConfigID()
-    if not config_id and gspec_id then
+    local config_id = is_inspect and -1 or (C_ClassTalents and C_ClassTalents.GetActiveConfigID())
+    if not config_id and gspec_id and C_ClassTalents then
       local config_list = C_ClassTalents.GetConfigIDsBySpecID(gspec_id)
       config_id = config_list[1]
     end
@@ -601,20 +602,22 @@ function lib:BuildInfo (unit)
     end
 
     wipe (info.pvp_talents)
-    if is_inspect then
-      for index = 1, NUM_PVP_TALENT_SLOTS do
-        local talent_id = GetInspectSelectedPvpTalent (unit, index)
-        if talent_id then
-          info.pvp_talents[talent_id] = self:GetCachedPvpTalentInfoByID (talent_id)
+    if (GetPvpTalentSlotInfo) then
+      if is_inspect then
+        for index = 1, NUM_PVP_TALENT_SLOTS do
+          local talent_id = GetInspectSelectedPvpTalent (unit, index)
+          if talent_id then
+            info.pvp_talents[talent_id] = self:GetCachedPvpTalentInfoByID (talent_id)
+          end
         end
-      end
-    else
-      -- C_SpecializationInfo.GetAllSelectedPvpTalentIDs will sometimes return a lot of extra talents
-      for index = 1, NUM_PVP_TALENT_SLOTS do
-        local slot_info = GetPvpTalentSlotInfo (index)
-        local talent_id = slot_info and slot_info.selectedTalentID
-        if talent_id then
-          info.pvp_talents[talent_id] = self:GetCachedPvpTalentInfoByID (talent_id)
+      else
+        -- C_SpecializationInfo.GetAllSelectedPvpTalentIDs will sometimes return a lot of extra talents
+        for index = 1, NUM_PVP_TALENT_SLOTS do
+          local slot_info = GetPvpTalentSlotInfo (index)
+          local talent_id = slot_info and slot_info.selectedTalentID
+          if talent_id then
+            info.pvp_talents[talent_id] = self:GetCachedPvpTalentInfoByID (talent_id)
+          end
         end
       end
     end
