@@ -6,15 +6,6 @@ local Data = select(2, ...)
 ---@class BattleGroundEnemies
 local BattleGroundEnemies = BattleGroundEnemies
 local L = Data.L
-
-
-local IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-local IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-local IsTBCC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
-local IsWrath = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
-
-local SetRaidTargetIconTexture = SetRaidTargetIconTexture
-
 local GetTexCoordsForRoleSmallCircle = GetTexCoordsForRoleSmallCircle or function(role)
 	if ( role == "TANK" ) then
 		return 0, 19/64, 22/64, 41/64;
@@ -126,7 +117,7 @@ do
 	end
 
 	function buttonFunctions:Debug(...)
-		return BattleGroundEnemies:Debug(self.PlayerDetails.PlayerName, ...)
+		return BattleGroundEnemies:Debug(self.PlayerDetails and self.PlayerDetails.PlayerName, ...)
 	end 
 
 	function buttonFunctions:OnDragStart()
@@ -252,10 +243,11 @@ do
 
 	function buttonFunctions:UpdateCrowdControl(unitID)
 		local spellId, itemID, startTime, duration
-		if IsClassic or IsTBCC or IsWrath then
-			spellId, itemID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(unitID)
+		local one, two, three, four =  C_PvP.GetArenaCrowdControlInfo(unitID)
+		if four then --classsic uses four returns, extra item id
+			spellId, itemID, startTime, duration = one, two, three, four
 		else
-			spellId, startTime, duration = C_PvP.GetArenaCrowdControlInfo(unitID)
+			spellId, startTime, duration = one, two, three
 		end
 
 		if spellId then
@@ -1245,7 +1237,9 @@ function BattleGroundEnemies:CreatePlayerButton(mainframe, num)
 	playerButton.Counter = {}
 	playerButton:SetScript("OnEvent", function(self, event, ...)
 		--self.Counter[event] = (self.Counter[event] or 0) + 1
-
+		if self.db and self.db.profile and self.db.profile.DebugBlizzEvents then
+			self:Debug("OnEvent", event, ...)
+		end
 		self[event](self, ...)
 	end)
 	playerButton:SetScript("OnShow", function()

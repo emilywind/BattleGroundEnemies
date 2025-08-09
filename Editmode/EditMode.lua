@@ -37,8 +37,7 @@ function BattleGroundEnemies.EditMode.EditModeManager:AddFrame(frame, systemName
 	frame.Selection.Label:SetIgnoreParentScale(true)
 	frame.Selection.MouseOverHighlight = CreateFrame("frame", nil, frame.Selection, "NineSliceCodeTemplate")
 	Mixin(frame.Selection.Label, ShrinkUntilTruncateFontStringMixin)
-	Mixin(frame.Selection, BattleGroundEnemies.Mixins.CustomEditModeSystemSelectionBaseMixin,
-		BattleGroundEnemies.Mixins.EditModeSystemSelectionMixin)
+	Mixin(frame.Selection, BattleGroundEnemies.Mixins.CustomEditModeSystemSelectionBaseMixin, BattleGroundEnemies.Mixins.EditModeSystemSelectionMixin)
 	Mixin(frame, BattleGroundEnemies.Mixins.CustomEditModeSystemMixin)
 	frame.Selection:SetScript("OnMouseDown", frame.Selection.OnMouseDown)
 	frame.Selection:SetScript("OnDragStart", frame.Selection.OnDragStart)
@@ -52,7 +51,7 @@ function BattleGroundEnemies.EditMode.EditModeManager:AddFrame(frame, systemName
 end
 
 function BattleGroundEnemies.EditMode.EditModeManager:OpenEditmode()
-	--highlight all frames and make them clickable which opens the optons for that system
+    --highlight all frames and make them clickable which opens the optons for that system
 	for i = 1, #self.registeredSystemFrames do
 		self.registeredSystemFrames[i]:OnEditModeEnter()
 	end
@@ -60,7 +59,7 @@ function BattleGroundEnemies.EditMode.EditModeManager:OpenEditmode()
 end
 
 function BattleGroundEnemies.EditMode.EditModeManager:CloseEditmode()
-	--highlight all frames and make them clickable which opens the optons for that system
+    --highlight all frames and make them clickable which opens the optons for that system
 	for i = 1, #self.registeredSystemFrames do
 		self.registeredSystemFrames[i]:OnEditModeExit()
 	end

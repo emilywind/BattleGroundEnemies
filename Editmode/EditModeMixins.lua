@@ -1,3 +1,4 @@
+
 ---@type string
 local AddonName = ...
 ---@class Data
@@ -17,6 +18,7 @@ local EditModeSystemSettingsDialog = {}
 
 EditModeSystemSettingsDialog.UpdateDialog = function(self, systemFrame)
 
+
 end
 
 local currentSelection = ""
@@ -33,35 +35,35 @@ end
 BattleGroundEnemies.Mixins.CustomEditModeSystemMixin = {};
 
 local data = {
-	["Interface/Editmode/EditModeUI"] = {
-		["editmode-actionbar-highlight-nineslice-corner"] = { 16, 16, 0.03125, 0.53125, 0.285156, 0.347656, false, false, "1x" },
-		["_editmode-actionbar-highlight-nineslice-edgebottom"] = { 16, 16, 0, 0.5, 0.00390625, 0.0664062, true, false, "1x" },
-		["_editmode-actionbar-highlight-nineslice-edgetop"] = { 16, 16, 0, 0.5, 0.0742188, 0.136719, true, false, "1x" },
-		["editmode-actionbar-selected-nineslice-corner"] = { 16, 16, 0.03125, 0.53125, 0.355469, 0.417969, false, false, "1x" },
-		["_editmode-actionbar-selected-nineslice-edgebottom"] = { 16, 16, 0, 0.5, 0.144531, 0.207031, true, false, "1x" },
-		["_editmode-actionbar-selected-nineslice-edgetop"] = { 16, 16, 0, 0.5, 0.214844, 0.277344, true, false, "1x" },
-		["editmode-down-arrow"] = { 16, 11, 0.03125, 0.53125, 0.566406, 0.609375, false, false, "1x" },
-		["editmode-up-arrow"] = { 16, 11, 0.03125, 0.53125, 0.617188, 0.660156, false, false, "1x" },
-		["editmode-new-layout-plus-disabled"] = { 16, 16, 0.03125, 0.53125, 0.425781, 0.488281, false, false, "1x" },
-		["editmode-new-layout-plus"] = { 16, 16, 0.03125, 0.53125, 0.496094, 0.558594, false, false, "1x" },
-	},  -- Interface/Editmode/EditModeUI
-	["Interface/Editmode/EditModeUIHighlightBackground"] = {
-		["editmode-actionbar-highlight-nineslice-center"] = { 16, 16, 0, 1, 0, 1, true, true, "1x" },
-	},  -- Interface/Editmode/EditModeUIHighlightBackground
-	["Interface/Editmode/EditModeUISelectedBackground"] = {
-		["editmode-actionbar-selected-nineslice-center"] = { 16, 16, 0, 1, 0, 1, true, true, "1x" },
-	},  -- Interface/Editmode/EditModeUISelectedBackground
-	["Interface/Editmode/EditModeUIVertical"] = {
-		["!editmode-actionbar-highlight-nineslice-edgeleft"] = { 16, 16, 0.0078125, 0.132812, 0, 1, false, true, "1x" },
-		["!editmode-actionbar-highlight-nineslice-edgeright"] = { 16, 16, 0.148438, 0.273438, 0, 1, false, true, "1x" },
-		["!editmode-actionbar-selected-nineslice-edgeleft"] = { 16, 16, 0.289062, 0.414062, 0, 1, false, true, "1x" },
-		["!editmode-actionbar-selected-nineslice-edgeright"] = { 16, 16, 0.429688, 0.554688, 0, 1, false, true, "1x" },
+	["Interface/Editmode/EditModeUI"]={
+		["editmode-actionbar-highlight-nineslice-corner"]={16, 16, 0.03125, 0.53125, 0.285156, 0.347656, false, false, "1x"},
+		["_editmode-actionbar-highlight-nineslice-edgebottom"]={16, 16, 0, 0.5, 0.00390625, 0.0664062, true, false, "1x"},
+		["_editmode-actionbar-highlight-nineslice-edgetop"]={16, 16, 0, 0.5, 0.0742188, 0.136719, true, false, "1x"},
+		["editmode-actionbar-selected-nineslice-corner"]={16, 16, 0.03125, 0.53125, 0.355469, 0.417969, false, false, "1x"},
+		["_editmode-actionbar-selected-nineslice-edgebottom"]={16, 16, 0, 0.5, 0.144531, 0.207031, true, false, "1x"},
+		["_editmode-actionbar-selected-nineslice-edgetop"]={16, 16, 0, 0.5, 0.214844, 0.277344, true, false, "1x"},
+		["editmode-down-arrow"]={16, 11, 0.03125, 0.53125, 0.566406, 0.609375, false, false, "1x"},
+		["editmode-up-arrow"]={16, 11, 0.03125, 0.53125, 0.617188, 0.660156, false, false, "1x"},
+		["editmode-new-layout-plus-disabled"]={16, 16, 0.03125, 0.53125, 0.425781, 0.488281, false, false, "1x"},
+		["editmode-new-layout-plus"]={16, 16, 0.03125, 0.53125, 0.496094, 0.558594, false, false, "1x"},
+	  }, -- Interface/Editmode/EditModeUI
+	  ["Interface/Editmode/EditModeUIHighlightBackground"]={
+		["editmode-actionbar-highlight-nineslice-center"]={16, 16, 0, 1, 0, 1, true, true, "1x"},
+	  }, -- Interface/Editmode/EditModeUIHighlightBackground
+	  ["Interface/Editmode/EditModeUISelectedBackground"]={
+		["editmode-actionbar-selected-nineslice-center"]={16, 16, 0, 1, 0, 1, true, true, "1x"},
+	  }, -- Interface/Editmode/EditModeUISelectedBackground
+	  ["Interface/Editmode/EditModeUIVertical"]={
+		["!editmode-actionbar-highlight-nineslice-edgeleft"]={16, 16, 0.0078125, 0.132812, 0, 1, false, true, "1x"},
+		["!editmode-actionbar-highlight-nineslice-edgeright"]={16, 16, 0.148438, 0.273438, 0, 1, false, true, "1x"},
+		["!editmode-actionbar-selected-nineslice-edgeleft"]={16, 16, 0.289062, 0.414062, 0, 1, false, true, "1x"},
+		["!editmode-actionbar-selected-nineslice-edgeright"]={16, 16, 0.429688, 0.554688, 0, 1, false, true, "1x"},
 	}
 }
 
 local function GetAtlasDataAndFilepath(atlasname)
 	for filePath, fileAtlasses in pairs(data) do
-		for name, atlasData in pairs(fileAtlasses) do
+		for name,atlasData in pairs(fileAtlasses) do
 			if name == atlasname then return atlasData, filePath end
 		end
 	end
@@ -91,35 +93,34 @@ local function SetupTextureCoordinates(piece, setupInfo, pieceLayout, userLayout
 end
 
 local EditModeSystemSelectionLayout = EditModeSystemSelectionLayout or
-		{
-			["TopRightCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x = 8, y = 8 },
-			["TopLeftCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x = -8, y = 8 },
-			["BottomLeftCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x = -8, y = -8 },
-			["BottomRightCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x = 8, y = -8 },
-			["TopEdge"] = { atlas = "_%s-NineSlice-EdgeTop" },
-			["BottomEdge"] = { atlas = "_%s-NineSlice-EdgeBottom" },
-			["LeftEdge"] = { atlas = "!%s-NineSlice-EdgeLeft" },
-			["RightEdge"] = { atlas = "!%s-NineSlice-EdgeRight" },
-			["Center"] = { atlas = "%s-NineSlice-Center", x = -8, y = 8, x1 = 8, y1 = -8, },
-			["setupPieceVisualsFunction"] = not (C_Texture and C_Texture.GetAtlasInfo("editmode-actionbar-selected-nineslice-corner")) and
-			function(container, piece, setup, pieceLayout, textureKit, userLayout)
-				local atlasname = string.format(pieceLayout.atlas, textureKit)
-				local atlasnameLowercase = atlasname:lower()
-				local atlasData, atlasFilePath = GetAtlasDataAndFilepath(atlasnameLowercase)
-				local splitted = { strsplit("/", atlasFilePath) }
-				local suffixPath = splitted[#splitted]
-
-				--piece:SetHorizTile(atlasData and atlasData[7] or false);
-				--piece:SetVertTile(atlasData and atlasData[8] or false);
-
-				piece:SetTexture([[Interface\AddOns\BattleGroundEnemies\Textures\Editmode\]] .. suffixPath)
-				piece:SetSize(atlasData[1], atlasData[2])
-				piece:SetTexCoord(atlasData[3], atlasData[4], atlasData[5], atlasData[6])
-
-				-- Change texture coordinates before applying atlas.
-				SetupTextureCoordinates(piece, setup, pieceLayout, userLayout);
-			end
-		};
+{
+	["TopRightCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x=8, y=8 },
+	["TopLeftCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x=-8, y=8 },
+	["BottomLeftCorner"] = { atlas = "%s-NineSlice-Corner", mirrorLayout = true, x=-8, y=-8 },
+	["BottomRightCorner"] = { atlas = "%s-NineSlice-Corner",  mirrorLayout = true, x=8, y=-8 },
+	["TopEdge"] = { atlas = "_%s-NineSlice-EdgeTop" },
+	["BottomEdge"] = { atlas = "_%s-NineSlice-EdgeBottom" },
+	["LeftEdge"] = { atlas = "!%s-NineSlice-EdgeLeft" },
+	["RightEdge"] = { atlas = "!%s-NineSlice-EdgeRight" },
+	["Center"] = { atlas = "%s-NineSlice-Center", x = -8, y = 8, x1 = 8, y1 = -8, },
+	["setupPieceVisualsFunction"] = not (C_Texture and C_Texture.GetAtlasInfo("editmode-actionbar-selected-nineslice-corner")) and function(container, piece, setup, pieceLayout, textureKit, userLayout) 
+		local atlasname = string.format(pieceLayout.atlas, textureKit)
+		local atlasnameLowercase = atlasname:lower()
+		local atlasData, atlasFilePath = GetAtlasDataAndFilepath(atlasnameLowercase)
+		local splitted = {strsplit("/", atlasFilePath)}
+		local suffixPath = splitted[#splitted]
+		
+		--piece:SetHorizTile(atlasData and atlasData[7] or false);
+		--piece:SetVertTile(atlasData and atlasData[8] or false);
+	
+		piece:SetTexture([[Interface\AddOns\BattleGroundEnemies\Textures\Editmode\]]..suffixPath)
+		piece:SetSize(atlasData[1], atlasData[2])
+		piece:SetTexCoord(atlasData[3], atlasData[4], atlasData[5], atlasData[6])
+	
+		-- Change texture coordinates before applying atlas.
+		SetupTextureCoordinates(piece, setup, pieceLayout, userLayout);		
+	end
+};
 
 BattleGroundEnemies.Mixins.CustomEditModeSystemSelectionBaseMixin = {};
 
@@ -129,10 +130,14 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemSelectionBaseMixin:OnLoa
 		self.Label:SetFontObjectsToTry("GameFontHighlightLarge", "GameFontHighlightMedium", "GameFontHighlightSmall");
 	end
 	if self.HorizontalLabel then
-		self.HorizontalLabel:SetFontObjectsToTry("GameFontHighlightLarge", "GameFontHighlightMedium",
-			"GameFontHighlightSmall");
+		self.HorizontalLabel:SetFontObjectsToTry("GameFontHighlightLarge", "GameFontHighlightMedium", "GameFontHighlightSmall");
 	end
 end
+
+
+
+
+
 
 function BattleGroundEnemies.Mixins.CustomEditModeSystemSelectionBaseMixin:ShowHighlighted()
 	NineSliceUtil.ApplyLayout(self, EditModeSystemSelectionLayout, self.highlightTextureKit);
@@ -166,15 +171,15 @@ end
 local EditModeSystemSelectionMixin = EditModeSystemSelectionMixin or {}
 
 function EditModeSystemSelectionMixin:SetGetLabelTextFunction(getLabelText)
-	self.getLabelText = getLabelText;
+    self.getLabelText = getLabelText;
 end
 
 function EditModeSystemSelectionMixin:UpdateLabelVisibility()
-	if self.getLabelText then
-		self.Label:SetText(self.getLabelText());
-	end
+    if self.getLabelText then
+        self.Label:SetText(self.getLabelText());
+    end
 
-	self.Label:SetShown(self.isSelected);
+    self.Label:SetShown(self.isSelected);
 end
 
 BattleGroundEnemies.Mixins.EditModeSystemSelectionMixin = EditModeSystemSelectionMixin
@@ -208,6 +213,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:OnSystemLoad()
 	--self.settingDisplayInfoMap = EditModeSettingDisplayInfoManager:GetSystemSettingDisplayInfoMap(self.system);
 end
 
+
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:ProcessMovementKey(key)
 	if not self:CanBeMoved() then
 		return;
@@ -230,8 +236,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:ProcessMovementKey
 	end
 
 	if self == PlayerCastingBarFrame then
-		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self,
-			Enum.EditModeCastBarSetting.LockToPlayerFrame, 0);
+		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self, Enum.EditModeCastBarSetting.LockToPlayerFrame, 0);
 	end
 
 	self:StopMovingOrSizing();
@@ -249,6 +254,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:OnKeyDown(key)
 	if movementKeys[key] then
 		self:ProcessMovementKey(key);
 	end
+
 end
 
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:OnKeyUp(key)
@@ -294,8 +300,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:SetScaleOverride(n
 	end
 end
 
-function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:SetPointOverride(point, relativeTo, relativePoint, offsetX,
-																																							 offsetY)
+function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:SetPointOverride(point, relativeTo, relativePoint, offsetX, offsetY)
 	self:SetPointBase(point, relativeTo, relativePoint, offsetX, offsetY);
 	self:SetSnappedToFrame(relativeTo);
 	--BattleGroundEnemies.EditMode.EditModeManager:OnEditModeSystemAnchorChanged();
@@ -382,12 +387,10 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:TrySetCompositeNum
 	local rawNewValue = self:ConvertSettingDisplayValueToRawValue(setting, newValue);
 	if rawOldValue ~= rawNewValue then
 		local hundredsValue = math.floor(newValue / 100);
-		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self,
-			settingDisplayInfo.compositeNumberHundredsSetting, hundredsValue);
+		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self, settingDisplayInfo.compositeNumberHundredsSetting, hundredsValue);
 
 		local tensAndOnesValue = math.floor(newValue % 100);
-		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self,
-			settingDisplayInfo.compositeNumberTensAndOnesSetting, tensAndOnesValue);
+		BattleGroundEnemies.EditMode.EditModeManager:OnSystemSettingChange(self, settingDisplayInfo.compositeNumberTensAndOnesSetting, tensAndOnesValue);
 	end
 	return true;
 end
@@ -463,6 +466,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:UpdateSystem(syste
 	end
 end
 
+
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:UpdateSystemSetting(setting, entireSystemUpdate)
 	if not entireSystemUpdate then
 		self.dirtySettings[setting] = true;
@@ -473,8 +477,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:UpdateSystemSettin
 	end
 
 	if self:IsSettingDirty(setting) then
-		BattleGroundEnemies.EditMode.EditModeManager:MirrorSetting(self.system, self.systemIndex, setting,
-			self:GetSettingValue(setting));
+		BattleGroundEnemies.EditMode.EditModeManager:MirrorSetting(self.system, self.systemIndex, setting, self:GetSettingValue(setting));
 	end
 end
 
@@ -509,7 +512,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:HasCompositeNumber
 	-- Composite number settings are settings which represent multiple other hidden settings which combine to form the one main setting's number
 	-- So if we want to know if a composite number setting exists we actually want to be checking if all the sub settings which make up the number exist
 	return self:HasSetting(settingDisplayInfo.compositeNumberHundredsSetting)
-			and self:HasSetting(settingDisplayInfo.compositeNumberTensAndOnesSetting);
+		and self:HasSetting(settingDisplayInfo.compositeNumberTensAndOnesSetting);
 end
 
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:HasSetting(setting)
@@ -550,6 +553,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:GetSettingValue(se
 		return self.settingMap[setting].displayValue or self.settingMap[setting].value;
 	end
 end
+
 
 -- Override in inheriting mixins as needed
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:UseSettingAltName(setting)
@@ -682,8 +686,7 @@ end
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:GetCombinedSelectionOffset(frameInfo, forYOffset)
 	local offset;
 	if frameInfo.frame.Selection then
-		offset = -self:GetSelectionOffset(frameInfo.point, forYOffset) +
-		frameInfo.frame:GetSelectionOffset(frameInfo.relativePoint, forYOffset) + frameInfo.offset;
+		offset = -self:GetSelectionOffset(frameInfo.point, forYOffset) + frameInfo.frame:GetSelectionOffset(frameInfo.relativePoint, forYOffset) + frameInfo.offset;
 	else
 		offset = -self:GetSelectionOffset(frameInfo.point, forYOffset) + frameInfo.offset;
 	end
@@ -811,7 +814,7 @@ end
 
 function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:GetFrameMagneticEligibility(systemFrame)
 	-- Can't magnetize to myself
-	if systemFrame == self then
+	if systemFrame ==  self then
 		return nil;
 	end
 
@@ -826,10 +829,8 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:GetFrameMagneticEl
 		return nil;
 	end
 
-	local horizontalEligible = self:IsVerticallyAlignedWithFrame(systemFrame) and
-	(self:IsToTheLeftOfFrame(systemFrame) or self:IsToTheRightOfFrame(systemFrame));
-	local verticalEligible = self:IsHorizontallyAlignedWithFrame(systemFrame) and
-	(self:IsAboveFrame(systemFrame) or self:IsBelowFrame(systemFrame));
+	local horizontalEligible = self:IsVerticallyAlignedWithFrame(systemFrame) and (self:IsToTheLeftOfFrame(systemFrame) or self:IsToTheRightOfFrame(systemFrame));
+	local verticalEligible = self:IsHorizontallyAlignedWithFrame(systemFrame) and (self:IsAboveFrame(systemFrame) or self:IsBelowFrame(systemFrame));
 
 	return horizontalEligible, verticalEligible;
 end
@@ -922,7 +923,7 @@ function BattleGroundEnemies.Mixins.CustomEditModeSystemMixin:OnDragStop()
 
 		if BattleGroundEnemies.EditMode.EditModeManager:IsSnapEnabled() then
 			--BattleGroundEnemies:Debug("1")
-			BattleGroundEnemies.CustomEditModeMagnetismManager:ApplyMagnetism(self); --meses up when trieying to align under the button
+			BattleGroundEnemies.CustomEditModeMagnetismManager:ApplyMagnetism(self);  --meses up when trieying to align under the button
 		end
 		BattleGroundEnemies.EditMode.EditModeManager:OnSystemPositionChange(self);
 	end

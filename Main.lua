@@ -48,7 +48,6 @@ local InCombatLockdown = InCombatLockdown
 local IsInBrawl = C_PvP.IsInBrawl
 local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
-local IsRatedBattleground = C_PvP.IsRatedBattleground
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData
 local RequestCrowdControlSpell = C_PvP.RequestCrowdControlSpell
 local SetBattlefieldScoreFaction = SetBattlefieldScoreFaction
@@ -67,7 +66,6 @@ local IsTBCC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 local IsWrath = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 
 local HasSpeccs = not not GetSpecialization  -- Mists of Pandaria
-local HasRBG = not not IsRatedBattleground
 
 local MaxLevel = GetMaxPlayerLevel()
 
@@ -161,7 +159,7 @@ BattleGroundEnemies.states = {
 	WOW_PROJECT_ID = WOW_PROJECT_ID,
 	isInArena = false,
 	isInBattleground = false,
-	userIsAlive = false,
+	userIsAlive = not UnitIsDeadOrGhost("player"),
 	currentMapID = false,
 	isRatedBG = false,
 	isSoloRBG = false,
@@ -621,14 +619,6 @@ function BattleGroundEnemies:NewButtonModule(moduleSetupTable)
 		copyModuleDefaultsIntoDefaults(Data.defaultSettings.profile, moduleName, moduleSetupTable.generalDefaults)
 	end
 
-
-
-	--not used
-	-- moduleFrame:SetScript("OnEvent", function(self, event, ...)
-	-- 	BattleGroundEnemies:Debug("BattleGroundEnemies module event", moduleName, event, ...)
-	-- 	self[event](self, ...)
-	-- end)
-
 	self.ButtonModules[moduleName] = moduleFrame
 	return moduleFrame
 end
@@ -648,7 +638,9 @@ end
 
 BattleGroundEnemies:SetScript("OnEvent", function(self, event, ...)
 	--self.Counter[event] = (self.Counter[event] or 0) + 1
-	--BattleGroundEnemies:Debug("BattleGroundEnemies OnEvent", event, ...)
+	if self.db and self.db.profile and self.db.profile.DebugBlizzEvents then
+		self:Debug("BattleGroundEnemies OnEvent", event, ...)
+	end
 	self[event](self, ...)
 end)
 BattleGroundEnemies:Hide()
@@ -1131,8 +1123,6 @@ BattleGroundEnemies.GeneralEvents = {
 	"ARENA_COOLDOWNS_UPDATE",        --fires when a arenaX enemy used a trinket or racial to break cc, C_PvP.GetArenaCrowdControlInfo(unitID) shoudl be called afterwards to get used CCs
 	"RAID_TARGET_UPDATE",
 	"UNIT_TARGET",
-	"PLAYER_ALIVE",
-	"PLAYER_UNGHOST",
 	"UNIT_AURA",
 	"UNIT_HEALTH",
 	"UNIT_MAXHEALTH",
@@ -1156,43 +1146,41 @@ BattleGroundEnemies.WrathEvents = {
 
 
 function BattleGroundEnemies:RegisterEvents()
-	for i = 1, #self.GeneralEvents do
-		self:RegisterEvent(self.GeneralEvents[i])
-	end
-	if IsClassic then
-		for i = 1, #self.ClassicEvents do
-			self:RegisterEvent(self.ClassicEvents[i])
+	local allEvents = Data.Helpers.JoinArrays(self.GeneralEvents, self.ClassicEvents, self.WrathEvents, self.RetailEvents)
+	if C_EventUtils and C_EventUtils.IsEventValid then
+		for i = 1, #allEvents do
+			local event = allEvents[i]
+			if C_EventUtils.IsEventValid(event) then
+				self:RegisterEvent(event)
+			end
 		end
-	end
-	if IsWrath then
-		for i = 1, #self.WrathEvents do
-			self:RegisterEvent(self.WrathEvents[i])
+	else
+		for i = 1, #self.GeneralEvents do
+			self:RegisterEvent(self.GeneralEvents[i])
 		end
-	end
-	if IsRetail then
-		for i = 1, #self.RetailEvents do
-			self:RegisterEvent(self.RetailEvents[i])
+		if IsClassic then
+			for i = 1, #self.ClassicEvents do
+				self:RegisterEvent(self.ClassicEvents[i])
+			end
+		end
+		if IsWrath then
+			for i = 1, #self.WrathEvents do
+				self:RegisterEvent(self.WrathEvents[i])
+			end
+		end
+		if IsRetail then
+			for i = 1, #self.RetailEvents do
+				self:RegisterEvent(self.RetailEvents[i])
+			end
 		end
 	end
 end
 
 function BattleGroundEnemies:UnregisterEvents()
-	for i = 1, #self.GeneralEvents do
-		self:UnregisterEvent(self.GeneralEvents[i])
-	end
-	if IsClassic then
-		for i = 1, #self.ClassicEvents do
-			self:UnregisterEvent(self.ClassicEvents[i])
-		end
-	end
-	if IsWrath then
-		for i = 1, #self.WrathEvents do
-			self:UnregisterEvent(self.WrathEvents[i])
-		end
-	end
-	if IsRetail then
-		for i = 1, #self.RetailEvents do
-			self:UnregisterEvent(self.RetailEvents[i])
+	local allEvents = Data.Helpers.JoinArrays(self.GeneralEvents, self.ClassicEvents, self.WrathEvents, self.RetailEvents)
+	for i = 1, #allEvents do
+		if self:IsEventRegistered(allEvents[i]) then
+			self:UnregisterEvent(allEvents[i])
 		end
 	end
 end
@@ -1373,7 +1361,6 @@ do
 			GUID = UnitGUID("player")
 		}
 
-
 		self.db = LibStub("AceDB-3.0"):New("BattleGroundEnemiesDB", Data.defaultSettings, true)
 
 		self.db.RegisterCallback(self, "OnProfileChanged", "ProfileChanged")
@@ -1406,9 +1393,14 @@ do
 
 
 
-		self:RegisterEvent("GROUP_ROSTER_UPDATE")
+		self:RegisterEvent("GROUP_ROSTER_UPDATE") --Fired whenever a group or raid is formed or disbanded, players are leaving or joining the group or raid.
 		self:RegisterEvent("PLAYER_ENTERING_WORLD") -- fired on reload UI and on every loading screen (for switching zones, intances etc)
-		self:RegisterEvent("PARTY_LEADER_CHANGED")
+		self:RegisterEvent("PARTY_LEADER_CHANGED") --Fired when the player's leadership changed.
+		self:RegisterEvent("PLAYER_ALIVE") --Fired when the player releases from death to a graveyard; or accepts a resurrect before releasing their spirit. Does not fire when the player is alive after being a ghost. PLAYER_UNGHOST is triggered in that case.
+		self:RegisterEvent("PLAYER_UNGHOST") --Fired when the player is alive after being a ghost.
+		self:RegisterEvent("PLAYER_DEAD") --Fired when the player has died.
+
+
 
 		self:SetupOptions()
 
@@ -1564,7 +1556,6 @@ end
 
 --fires when a arena enemy appears and a frame is ready to be shown
 function BattleGroundEnemies:ARENA_OPPONENT_UPDATE(unitID, unitEvent)
-	BattleGroundEnemies:Debug("ARENA_OPPONENT_UPDATE", unitID, unitEvent, UnitName(unitID))
 	--unitEvent can be: "seen", "unseen", "destroyed", "cleared"
 	self:Debug("ARENA_OPPONENT_UPDATE", unitID, unitEvent, UnitName(unitID))
 
@@ -1582,7 +1573,7 @@ function BattleGroundEnemies:ARENA_OPPONENT_UPDATE(unitID, unitEvent)
 			playerButton:DispatchEvent("ArenaOpponentHidden")
 		end
 	end
-	self:ThrottleUpdateArenaPlayers()
+	self:CheckForArenaEnemies()
 end
 
 function BattleGroundEnemies:GetPlayerbuttonByUnitID(unitID)
@@ -1966,6 +1957,10 @@ function BattleGroundEnemies:PLAYER_REGEN_ENABLED()
 	wipe(self.PendingUpdates)
 end
 
+function BattleGroundEnemies:PlayerDead()
+	self.states.userIsAlive = false
+end
+
 function BattleGroundEnemies:PlayerAlive()
 	--recheck the targets of groupmembers
 	for allyName, allyButton in pairs(self.Allies.Players) do
@@ -1976,10 +1971,14 @@ end
 
 function BattleGroundEnemies:PLAYER_ALIVE()
 	if UnitIsGhost("player") then --Releases his ghost to a graveyard.
-		self.states.userIsAlive = false
+		self:PlayerDead()
 	else                       --alive (revived while not being a ghost)
 		self:PlayerAlive()
 	end
+end
+
+function BattleGroundEnemies:PLAYER_DEAD()
+	self:PlayerDead()
 end
 
 function BattleGroundEnemies:UNIT_TARGET(unitID)
@@ -2058,18 +2057,7 @@ function BattleGroundEnemies:ToggleRaidFrames()
 	restoreShowRaidFrameCVar()
 end
 
-local UpdateArenaPlayersTicker
 
-
---too avoid calling UpdateArenaPlayers too many times within a second
-function BattleGroundEnemies:ThrottleUpdateArenaPlayers()
-	if UpdateArenaPlayersTicker then UpdateArenaPlayersTicker:Cancel() end -- use a timer to apply changes after 1 second, this prevents from too many updates after each player is found
-
-	UpdateArenaPlayersTicker = CTimerNewTicker(0.5, function()
-		BattleGroundEnemies:UpdateArenaPlayers()
-		UpdateArenaPlayersTicker = nil
-	end, 1)
-end
 
 function BattleGroundEnemies:UpdateArenaPlayers()
 	BattleGroundEnemies:Debug("UpdateArenaPlayers")
@@ -2089,6 +2077,22 @@ function BattleGroundEnemies:UpdateArenaPlayers()
 		C_Timer.After(2, function() self:UpdateArenaPlayers() end)
 	end
 end
+
+
+local UpdateArenaPlayersTicker
+
+--too avoid calling UpdateArenaPlayers too many times within a second
+function BattleGroundEnemies:ThrottleUpdateArenaPlayers()
+	if UpdateArenaPlayersTicker then UpdateArenaPlayersTicker:Cancel() end -- use a timer to apply changes after half second, this prevents from too many updates after each player is found
+
+	if not self.states.isInArena and not self.states.isInBattleground then return end
+	UpdateArenaPlayersTicker = CTimerNewTicker(0.5, function()
+		BattleGroundEnemies:UpdateArenaPlayers()
+		UpdateArenaPlayersTicker = nil
+	end, 1)
+end
+
+
 
 function BattleGroundEnemies:CheckForArenaEnemies()
 	BattleGroundEnemies:Debug("CheckForArenaEnemies")
@@ -2330,7 +2334,7 @@ function BattleGroundEnemies:PLAYER_ENTERING_WORLD()
 	BattleGroundEnemies:Debug("PLAYER_ENTERING_WORLD")
 	self:ResetCombatLogScanniningTables()
 	self:DisableTestOrEditmode()
-	
+
 
 	self.Enemies:RemoveAllPlayersFromAllSources()
 	self.Allies:RemoveAllPlayersFromSource(self.consts.PlayerSources.Scoreboard)
@@ -2347,22 +2351,27 @@ function BattleGroundEnemies:PLAYER_ENTERING_WORLD()
 			BattleGroundEnemies.states.isInArena = true
 		else
 			BattleGroundEnemies.states.isInBattleground = true
-			if HasRBG then
-				C_Timer.After(5,
-					function()        --Delay this check, since its happening sometimes that this data is not ready yet
-						self.states.isRatedBG = IsRatedBattleground()
-						self.states.isSoloRBG = C_PvP and C_PvP.IsSoloRBG and C_PvP.IsSoloRBG()
 
-						self:UPDATE_BATTLEFIELD_SCORE() --trigger the function again because since 10.0.0 UPDATE_BATTLEFIELD_SCORE doesnt fire reguralry anymore and RequestBattlefieldScore doesnt trigger the event
-					end)
-			end
+			C_Timer.After(5,
+				function()        --Delay this check, since its happening sometimes that this data is not ready yet
+					if C_PvP then
+						self.states.isRatedBG = C_PvP.IsRatedBattleground()
+						self.states.isSoloRBG = C_PvP.IsSoloRBG()
+					else
+						self.states.isRatedBG = IsRatedBattleground()
+						self.states.isSoloRBG = false
+					end
+
+					self:UPDATE_BATTLEFIELD_SCORE() --trigger the function again because since 10.0.0 UPDATE_BATTLEFIELD_SCORE doesnt fire reguralry anymore and RequestBattlefieldScore doesnt trigger the event
+				end)
 		end
 
 		self:Enable()
-		self.states.userIsAlive = true
 	else
-		BattleGroundEnemies.states.isInArena = false
-		BattleGroundEnemies.states.isInBattleground = false
+		self.states.isInArena = false
+		self.states.isInBattleground = false
+		self.states.isSoloRBG = false
+		self.states.isRatedBG = false
 		self:Disable()
 	end
 

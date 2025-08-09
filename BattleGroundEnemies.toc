@@ -1,7 +1,12 @@
 ## Interface: 110200
+## Interface-Retail: 110200
+## Interface-Classic: 11505
+## Interface-BCC: 20504
+## Interface-Wrath: 30403
+## Interface-Cata: 40401
 ## Title: BattleGroundEnemies
-## Version: 11.0.5.10
-## Author: Bullsei/Em
+## Version: @project-version@
+## Author: Bullsei
 ## SavedVariables: BattleGroundEnemiesDB
 ## OptionalDeps: Ace3, LibStub, LibRaces-1.0, UTF8, DRList-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
 ## IconTexture: Interface\AddOns\BattleGroundEnemies\bge_logo.tga
@@ -13,7 +18,9 @@
 embeds.xml
 #@end-no-lib-strip@
 
+#@retail@
 Libs\LibGroupInSpecT-1.1\lib.xml
+#@end-retail@
 
 Locales.lua
 

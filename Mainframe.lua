@@ -186,8 +186,9 @@ local function CreateMainFrame(playerType)
 
     mainframe:Hide()
     mainframe:SetScript("OnEvent", function(self, event, ...)
-        --self.Counter[event] = (self.Counter[event] or 0) + 1
-        --self:Debug("Enemies OnEvent", event, ...)
+		if self.db and self.db.profile and self.db.profile.DebugBlizzEvents then
+			self:Debug("OnEvent", event, ...)
+		end
         self[event](self, ...)
     end)
 
@@ -219,7 +220,7 @@ local function CreateMainFrame(playerType)
 	end
 
 	function mainframe:AddPlayerToSource(source, playerT)
-		self:Debug("AddPlayerToSource", self.PlayerType, playerT)
+		self:Debug("AddPlayerToSource", source, playerT)
 		if playerT.name then
 			if playerT.name == "" then return end
 		else
@@ -469,9 +470,9 @@ local function CreateMainFrame(playerType)
 			end
 
 
-			if BattleGroundEnemies.states.isInArena or BattleGroundEnemies.states.isInBattleground then
-				BattleGroundEnemies:CheckForArenaEnemies()
-			end
+
+			BattleGroundEnemies:CheckForArenaEnemies()
+
 		end
 		self:Show()
 	end
@@ -1344,7 +1345,7 @@ BattleGroundEnemies.Enemies.ARENA_PREP_OPPONENT_SPECIALIZATIONS = BattleGroundEn
 
 function BattleGroundEnemies.Enemies:UNIT_NAME_UPDATE(unitID)
 	self:Debug("UNIT_NAME_UPDATE", unitID)
-	BattleGroundEnemies:ThrottleUpdateArenaPlayers()
+	BattleGroundEnemies:CheckForArenaEnemies()
 end
 
 function BattleGroundEnemies.Enemies:NAME_PLATE_UNIT_ADDED(unitID)
